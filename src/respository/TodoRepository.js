@@ -1,7 +1,6 @@
 const TodoRepository = {
   async getTodos() {
     const todos = JSON.parse(localStorage.getItem('todos') || '[]')
-    await new Promise((resolve) => setTimeout(resolve, 1000))
     return todos
   },
 
@@ -29,7 +28,6 @@ const TodoRepository = {
     todos = [...todos, newTodo]
 
     localStorage.setItem('todos', JSON.stringify(todos))
-    await new Promise((resolve) => setTimeout(resolve, 1000))
     return newTodo
   },
 
@@ -49,7 +47,6 @@ const TodoRepository = {
     ]
 
     localStorage.setItem('todos', JSON.stringify(updatedTodos))
-    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     return updated
   },
@@ -59,7 +56,6 @@ const TodoRepository = {
     const index = todos.findIndex((todo) => todo.id === id)
     todos.splice(index, 1)
     localStorage.setItem('todos', JSON.stringify(todos))
-    await new Promise((resolve) => setTimeout(resolve, 100))
   },
 }
 
