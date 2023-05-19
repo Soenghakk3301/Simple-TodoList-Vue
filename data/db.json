@@ -1,0 +1,16 @@
+{
+  "todos": [
+    {
+      "id": 2,
+      "title": "Make marketing email",
+      "details": "lorem imere",
+      "complete": true
+    },
+    {
+      "title": "r234",
+      "details": "23423",
+      "complete": true,
+      "id": 3
+    }
+  ]
+}
