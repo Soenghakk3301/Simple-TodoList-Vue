@@ -1,14 +1,20 @@
+let cachedTodos = []
+
+async function initCache() {
+  cachedTodos = JSON.parse(localStorage.getItem('todos') || '[]')
+}
+
+initCache()
+
 const TodoRepository = {
   async getTodos() {
-    const todos = JSON.parse(localStorage.getItem('todos') || '[]')
-    return todos
+    return cachedTodos
   },
 
   async getTodoById(id) {
-    const todos = JSON.parse(localStorage.getItem('todos') || '[]')
-    const todo = todos.find((todo) => todo.id === parseInt(id))
+    const todo = cachedTodos.find((todo) => todo.id === parseInt(id))
 
-    if (todo === -1) {
+    if (!todo) {
       throw new Error(`Todo with id=${id} not found`)
     }
 
@@ -16,46 +22,44 @@ const TodoRepository = {
   },
 
   async addTodo(todo) {
-    let todos = JSON.parse(localStorage.getItem('todos') || '[]')
-
     const newTodo = {
-      id: todos.length + 1,
+      id: cachedTodos.length + 1,
       title: todo.title,
       details: todo.details,
       complete: todo.complete,
     }
 
-    todos = [...todos, newTodo]
+    cachedTodos.push(newTodo)
 
-    localStorage.setItem('todos', JSON.stringify(todos))
+    localStorage.setItem('todos', JSON.stringify(cachedTodos))
     return newTodo
   },
 
   async updateTodo(id, updatedTodo) {
-    const todos = await this.getTodos()
-    const index = todos.findIndex((todo) => todo.id === parseInt(id))
+    const index = cachedTodos.findIndex((todo) => todo.id === parseInt(id))
 
     if (index === -1) {
       throw new Error(`Todo with id=${id} not found`)
     }
 
-    const updated = { ...todos[index], ...updatedTodo }
-    const updatedTodos = [
-      ...todos.slice(0, index),
-      updated,
-      ...todos.slice(index + 1),
-    ]
+    const updated = { ...cachedTodos[index], ...updatedTodo }
+    cachedTodos[index] = updated
 
-    localStorage.setItem('todos', JSON.stringify(updatedTodos))
+    localStorage.setItem('todos', JSON.stringify(cachedTodos))
 
     return updated
   },
 
   async deleteTodo(id) {
-    const todos = JSON.parse(localStorage.getItem('todos') || '[]')
-    const index = todos.findIndex((todo) => todo.id === id)
-    todos.splice(index, 1)
-    localStorage.setItem('todos', JSON.stringify(todos))
+    const index = cachedTodos.findIndex((todo) => todo.id === parseInt(id))
+
+    if (index === -1) {
+      throw new Error(`Todo with id=${id} not found`)
+    }
+
+    cachedTodos.splice(index, 1)
+
+    localStorage.setItem('todos', JSON.stringify(cachedTodos))
   },
 }
 
