@@ -1,12 +1,12 @@
 <template>
-  <div class="project" :class="{ complete: todo.complete }">
+  <div class="project" :class="{ complete: computedTodo.complete }">
     <div class="actions">
-      <h3 @click="showDetails = !this.showDetails">{{ todo.title }}</h3>
+      <h3 @click="showDetails = !this.showDetails">{{ computedTodo.title }}</h3>
 
       <div class="icons">
         <router-link
-          :to="{ name: 'EditTodo', params: { id: todo.id } }"
-          :id="todo.id"
+          :to="{ name: 'EditTodo', params: { id: computedTodo.id } }"
+          :id="computedTodo.id"
         >
           <span class="material-icons"> edit </span>
         </router-link>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="details" v-if="showDetails">
-      <p>{{ todo.details }}</p>
+      <p>{{ computedTodo.details }}</p>
     </div>
   </div>
 </template>
@@ -30,6 +30,11 @@ export default {
       showDetails: false,
       uri: 'http://localhost:3000/todos/' + this.todo.id,
     }
+  },
+  computed: {
+    computedTodo() {
+      return { ...this.todo }
+    },
   },
   methods: {
     async deleteTodo() {

@@ -29,9 +29,9 @@ const TodoRepository = {
       complete: todo.complete,
     }
 
-    cachedTodos.push(newTodo)
+    const newTodos = [...cachedTodos, newTodo]
 
-    localStorage.setItem('todos', JSON.stringify(cachedTodos))
+    localStorage.setItem('todos', JSON.stringify(newTodos))
     return newTodo
   },
 
@@ -43,9 +43,14 @@ const TodoRepository = {
     }
 
     const updated = { ...cachedTodos[index], ...updatedTodo }
-    cachedTodos[index] = updated
 
-    localStorage.setItem('todos', JSON.stringify(cachedTodos))
+    const newTodos = [
+      ...cachedTodos.slice(0, index),
+      updated,
+      ...cachedTodos.slice(index + 1),
+    ]
+
+    localStorage.setItem('todos', JSON.stringify(newTodos))
 
     return updated
   },
@@ -57,9 +62,13 @@ const TodoRepository = {
       throw new Error(`Todo with id=${id} not found`)
     }
 
-    cachedTodos.splice(index, 1)
+    const newTodos = [
+      ...cachedTodos.slice(0, index),
+      ...cachedTodos.slice(index + 1),
+    ]
 
-    localStorage.setItem('todos', JSON.stringify(cachedTodos))
+    localStorage.setItem('todos', JSON.stringify(newTodos))
+    return
   },
 }
 
